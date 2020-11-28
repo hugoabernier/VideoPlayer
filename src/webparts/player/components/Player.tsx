@@ -5,7 +5,6 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { useEffect, useRef, useState } from "react";
 
 import "@pnp/polyfill-ie11"; // IE browser Support
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 
 /*export default class Player extends React.Component<{},any> {
 
@@ -56,6 +55,7 @@ function Login() {
   const videoRef = useRef<HTMLVideoElement>(undefined);
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(localStorage.getItem('@Player'));
+  const [videoUrl, setVideoUrl] = useState(localStorage.getItem('@Url'));
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
@@ -68,14 +68,14 @@ function Login() {
 
       videoRef.current.onpause = (event: any) => {
         if (event && event.target && event.target.duration && event.target.currentTime) {
-          localStorage.setItem(
-            "@Player",
-            JSON.stringify({
-              position: event.target.currentTime,
-              duration: event.target.duration
-            })
+          // localStorage.setItem(
+          //   "@Player",
+          //   JSON.stringify({
+          //     position: event.target.currentTime,
+          //     duration: event.target.duration
+          //   })
 
-          );
+          // );
           setPlaying(() => false);
         }
       };
@@ -85,13 +85,26 @@ function Login() {
         if (event && event.target && event.target.duration && event.target.currentTime) {
           setDuration(() => event.target.duration);
           setPosition(() => event.target.currentTime);
+          setVideoUrl(()=> videoRef.current.src);
         }
 
       };
 
-      SetRememberedTime();
+      // If we're loading the same video, reset the location to the last location
+      if (videoUrl === videoRef.current.src) {
+        videoRef.current.currentTime = +position;
+      } else {
+        // Otherwise, start at the beginning
+        videoRef.current.currentTime = 0;
+      }
+
     }
   }, [videoRef]);
+
+  React.useEffect(() => {
+    console.log("Setting the video URL", videoUrl);
+    localStorage.setItem('@Url', videoUrl);
+  }, [videoUrl]);
 
   React.useEffect(() => {
     console.log("Setting the position", position);
@@ -109,29 +122,30 @@ function Login() {
     videoRef.current.play();
   }
 
-  function SetRememberedTime() {
-    console.log("Set Remembered Time", videoRef);
-    // let item = await localStorage.getItem("@Player");
-    // if (item) {
-    //   let itemJson = JSON.parse(item);
+  // function SetRememberedTime() {
+  //   console.log("Set Remembered Time", videoRef);
+  //   // let item = await localStorage.getItem("@Player");
+  //   // if (item) {
+  //   //   let itemJson = JSON.parse(item);
 
-    //   if (itemJson.duration && itemJson.position) {
-    //     setDuration(() => itemJson.duration);
-    //     setPosition(() => itemJson.position);
-        videoRef.current.currentTime = +position;
-    //   }
-    // }
-  }
+  //   //   if (itemJson.duration && itemJson.position) {
+  //   //     setDuration(() => itemJson.duration);
+  //   //     setPosition(() => itemJson.position);
+  //       videoRef.current.currentTime = +position;
+  //   //   }
+  //   // }
+  // }
 
-  const videoUrl: string = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
-  //const videoUrl: string = "https://codrz.sharepoint.com/:v:/s/LMS/EWD68MK7MH1Om2LHpxn1rmMBPvjHCQx3bs1IL7muCmXQIQ?e=YPw9Wa";
+  //const url: string = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
+  const url: string = "https://codrz.sharepoint.com/sites/LMS/_layouts/15/download.aspx?SourceUrl=%2Fsites%2FLMS%2FShared%20Documents%2FAzureDevOps%2Emp4";
 
+  //const { clientWidth } = this.domElement;
   return (
     <div>
       <video
         ref={videoRef}
         style={{ width: 400, height: 400 }}
-        src={videoUrl}
+        src={url}
         controls
         >
       </video>
