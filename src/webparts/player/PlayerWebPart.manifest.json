@@ -21,7 +21,7 @@
     "description": { "default": "Media Player" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "Player"
+      "videoUrl": "https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
     }
   }]
 }

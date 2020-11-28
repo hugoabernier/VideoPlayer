@@ -1,7 +1,7 @@
 declare interface IPlayerWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  VideoUrlFieldLabel: string;
 }
 
 declare module 'PlayerWebPartStrings' {

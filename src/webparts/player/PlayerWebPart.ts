@@ -5,23 +5,35 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'PlayerWebPartStrings';
-import Player from './components/Player';
+import { Player } from './components/Player';
 import { IPlayerProps } from './components/IPlayerProps';
 
+/**
+ * Use this for dynamic properties
+ */
+//import { DynamicProperty } from '@microsoft/sp-component-base';
+
+/**
+ * Plain old boring web part thingies
+ */
+import {
+  BaseClientSideWebPart,
+  IWebPartPropertiesMetadata,
+  PropertyPaneDynamicFieldSet,
+  PropertyPaneDynamicField
+} from '@microsoft/sp-webpart-base';
 export interface IPlayerWebPartProps {
-  description: string;
+  videoUrl: string;
 }
 
 export default class PlayerWebPart extends BaseClientSideWebPart<IPlayerWebPartProps> {
-
   public render(): void {
     const element: React.ReactElement<IPlayerProps> = React.createElement(
       Player,
       {
-        description: this.properties.description
+        videoUrl: this.properties.videoUrl
       }
     );
 
@@ -32,9 +44,16 @@ export default class PlayerWebPart extends BaseClientSideWebPart<IPlayerWebPartP
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse('1.0');
-  }
+
+  // protected get propertiesMetadata(): IWebPartPropertiesMetadata {
+  //   return {
+  //     // Specify the web part properties data type to allow the address
+  //     // information to be serialized by the SharePoint Framework.
+  //     'videoUrl': {
+  //       dynamicPropertyType: 'string'
+  //     }
+  //   };
+  // }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
@@ -47,8 +66,8 @@ export default class PlayerWebPart extends BaseClientSideWebPart<IPlayerWebPartP
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('videoUrl', {
+                  label: strings.VideoUrlFieldLabel
                 })
               ]
             }

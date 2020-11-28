@@ -1,57 +1,16 @@
 import * as React from 'react';
 import styles from './Player.module.scss';
 import { IPlayerProps } from './IPlayerProps';
-import { escape } from '@microsoft/sp-lodash-subset';
 import { useEffect, useRef, useState } from "react";
+import { Slider } from 'office-ui-fabric-react/lib/Slider';
+import { IconButton, IIconProps, initializeIcons } from 'office-ui-fabric-react';
 
 import "@pnp/polyfill-ie11"; // IE browser Support
 
-/*export default class Player extends React.Component<{},any> {
+// Initialize icons in case this example uses them
+initializeIcons();
 
-  public VideoPlayer : React.RefObject<HTMLVideoElement>;
-
-  constructor(props: any)
-  {
-    super(props);
-    this.state = { isPlaying : 'False',};
-  }
-
-
-  public PlayVideo()
-  {
-      this.setState({'isPlaying':false});
-
-      const isPlaying = this.state.isPlaying;
-
-      if(isPlaying)
-      {
-         this.VideoPlayer.current.pause();
-      }
-      else
-      {
-        this.setState({'isPlaying':true});
-        this.VideoPlayer.current.play();
-      }
-  }
-
-
-
-  public render(): React.ReactElement<IPlayerProps> {
-    return (
-      <div>
-        <video ref={function(ref: any) { this.VideoPlayer = ref }.bind(this)}
-            width="400"
-            height="400" controls
-            id="VideoPlayer">
-            <source src ="https://codrz.sharepoint.com/:v:/r/sites/LMS/Shared%20Documents/AzureDevOps.mp4"/>
-            </video><br/>
-            <PrimaryButton text="Play" onClick={this.PlayVideo.bind(this)}>{isPlaying}</PrimaryButton>>
-      </div>
-    );
-  }
-}*/
-
-function Login() {
+export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
   const videoRef = useRef<HTMLVideoElement>(undefined);
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(localStorage.getItem('@Player'));
@@ -122,51 +81,49 @@ function Login() {
     videoRef.current.play();
   }
 
-  // function SetRememberedTime() {
-  //   console.log("Set Remembered Time", videoRef);
-  //   // let item = await localStorage.getItem("@Player");
-  //   // if (item) {
-  //   //   let itemJson = JSON.parse(item);
+  function SetTime(newPosition: number) {
+    videoRef.current.currentTime = newPosition;
+  }
 
-  //   //   if (itemJson.duration && itemJson.position) {
-  //   //     setDuration(() => itemJson.duration);
-  //   //     setPosition(() => itemJson.position);
-  //       videoRef.current.currentTime = +position;
-  //   //   }
-  //   // }
-  // }
+  function DisplayTime(timePosition: number): string {
+    const minutes: number = Math.floor(timePosition/60);
+    const seconds: number = timePosition % 60;
+
+    return pad(minutes.toFixed(0),2) + ":" + pad(seconds.toFixed(0),2);
+
+  }
+
+  function pad(num: string, size: number): string {
+    var s = "000000000" + num;
+    return s.substr(s.length-size);
+}
 
   //const url: string = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
-  const url: string = "https://codrz.sharepoint.com/sites/LMS/_layouts/15/download.aspx?SourceUrl=%2Fsites%2FLMS%2FShared%20Documents%2FAzureDevOps%2Emp4";
+  //const url: string = "https://codrz.sharepoint.com/sites/LMS/_layouts/15/download.aspx?SourceUrl=%2Fsites%2FLMS%2FShared%20Documents%2FAzureDevOps%2Emp4";
 
-  //const { clientWidth } = this.domElement;
+  const playIcon: IIconProps = { iconName: 'Play' };
+  const pauseIcon: IIconProps = { iconName: 'Pause' };
+
+
   return (
     <div>
       <video
         ref={videoRef}
         style={{ width: 400, height: 400 }}
-        src={url}
-        controls
+        src={props.videoUrl}
+        //controls
         >
       </video>
 
-      {/* <button onClick={() => SetRememberedTime()}>Set Remembered Time</button>
-      <button onClick={() => videoRef && videoRef.current && videoRef.current.play()}>Play Video</button> */}
-      <button onClick={() => (playing ? PausePlayer() : ResumePlayer())}>{playing ? "Pause" : "Play"}</button>
-
-      <div>
-        {(+position).toFixed(2)}/{duration.toFixed(2)}
-      </div>
-
-      {/* <input
-        type="range"
-        min={0}
+      <Slider
         max={duration}
-        value={position}
-        style={{ width: 300 }}
-      /> */}
+        value={+position}
+        label={`${DisplayTime(+position)}/${DisplayTime(duration)}`}
+        onChange={(newTime: number)=>SetTime(newTime)}
+        showValue={false}
+      />
+      <IconButton iconProps={playing ? pauseIcon : playIcon} title={playing ? "Pause": "Play"} ariaLabel={playing ? "Pause": "Play"} onClick={() =>(playing ? PausePlayer() : ResumePlayer()) }  />
+
     </div>
   );
-}
-
-export default Login;
+};

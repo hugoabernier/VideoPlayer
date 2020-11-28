@@ -1,3 +1,3 @@
 export interface IPlayerProps {
-  description: string;
+  videoUrl: string;
 }
