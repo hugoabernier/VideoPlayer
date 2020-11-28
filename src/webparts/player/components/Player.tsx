@@ -5,7 +5,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { useEffect, useRef, useState } from "react";
 
 import "@pnp/polyfill-ie11"; // IE browser Support
-import { DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 
 /*export default class Player extends React.Component<{},any> {
 
@@ -16,7 +16,7 @@ import { DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
     super(props);
     this.state = { isPlaying : 'False',};
   }
-  
+
 
   public PlayVideo()
   {
@@ -35,8 +35,8 @@ import { DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
       }
   }
 
-  
-  
+
+
   public render(): React.ReactElement<IPlayerProps> {
     return (
       <div>
@@ -44,7 +44,7 @@ import { DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
             width="400"
             height="400" controls
             id="VideoPlayer">
-            <source src ="https://codrz.sharepoint.com/:v:/r/sites/LMS/Shared%20Documents/AzureDevOps.mp4"/> 
+            <source src ="https://codrz.sharepoint.com/:v:/r/sites/LMS/Shared%20Documents/AzureDevOps.mp4"/>
             </video><br/>
             <PrimaryButton text="Play" onClick={this.PlayVideo.bind(this)}>{isPlaying}</PrimaryButton>>
       </div>
@@ -61,24 +61,30 @@ function Login() {
   useEffect(() => {
     if (videoRef) {
       videoRef.current.load();
-      videoRef.current.onplay = function (event: any) {
+      videoRef.current.onplay = (event: any) => {
         setPlaying(() => true);
       };
 
-      videoRef.current.onpause = function (event: any) {
-        localStorage.setItem(
-          "@Player",
-          JSON.stringify({
-            position: event?.target?.currentTime,
-            duration: event?.target?.duration
-          })
-        );
-        setPlaying(() => false);
+      videoRef.current.onpause = (event: any) => {
+        if (event && event.target && event.target.duration && event.target.currentTime) {
+          localStorage.setItem(
+            "@Player",
+            JSON.stringify({
+              position: event.target.currentTime,
+              duration: event.target.duration
+            })
+
+          );
+          setPlaying(() => false);
+        }
       };
 
-      videoRef.current.ontimeupdate = function (event: any) {
-        setDuration(() => event?.target?.duration);
-        setPosition(() => event?.target?.currentTime);
+      videoRef.current.ontimeupdate = (event: any) => {
+        if (event && event.target && event.target.duration && event.target.currentTime) {
+          setDuration(() => event.target.duration);
+          setPosition(() => event.target.currentTime);
+        }
+
       };
     }
   }, [videoRef]);
