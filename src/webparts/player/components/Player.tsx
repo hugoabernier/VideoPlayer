@@ -114,7 +114,7 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
     <div>
       <video
         ref={videoRef}
-        style={{ width: props.domElement.getBoundingClientRect().width }}
+        style={{ width: elementWidth }}
         src={props.videoUrl}
       //controls
       >
