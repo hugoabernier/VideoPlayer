@@ -90,7 +90,6 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
     const seconds: number = timePosition % 60;
 
     return pad(minutes.toFixed(0),2) + ":" + pad(seconds.toFixed(0),2);
-
   }
 
   function pad(num: string, size: number): string {
