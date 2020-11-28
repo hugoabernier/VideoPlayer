@@ -53,12 +53,13 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 }*/
 
 function Login() {
-  const videoRef = useRef<any>(undefined);
+  const videoRef = useRef<HTMLVideoElement>(undefined);
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
+    console.log("Use Effect", videoRef);
     if (videoRef) {
       videoRef.current.load();
       videoRef.current.onplay = (event: any) => {
@@ -80,58 +81,71 @@ function Login() {
       };
 
       videoRef.current.ontimeupdate = (event: any) => {
+        console.log("OnTimeUpdated", event);
         if (event && event.target && event.target.duration && event.target.currentTime) {
           setDuration(() => event.target.duration);
           setPosition(() => event.target.currentTime);
+          //SetRememberedTime();
         }
 
       };
+
+      SetRememberedTime();
     }
   }, [videoRef]);
 
   function PausePlayer() {
+    console.log("Pause", videoRef);
     videoRef.current.pause();
   }
 
   function ResumePlayer() {
+    console.log("Resume", videoRef);
     videoRef.current.play();
   }
 
   async function SetRememberedTime() {
+    console.log("Set Remembered Time", videoRef);
     let item = await localStorage.getItem("@Player");
     if (item) {
       let itemJson = JSON.parse(item);
-      setDuration(() => itemJson.duration);
-      setPosition(() => itemJson.position);
-      videoRef.current.currentTime = itemJson.position;
+
+      if (itemJson.duration && itemJson.position) {
+        setDuration(() => itemJson.duration);
+        setPosition(() => itemJson.position);
+        videoRef.current.currentTime = itemJson.position;
+      }
     }
   }
+
+  const videoUrl: string = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
+  //const videoUrl: string = "https://codrz.sharepoint.com/:v:/s/LMS/EWD68MK7MH1Om2LHpxn1rmMBPvjHCQx3bs1IL7muCmXQIQ?e=YPw9Wa";
 
   return (
     <div>
       <video
         ref={videoRef}
         style={{ width: 400, height: 400 }}
-        src={require("https://codrz.sharepoint.com/:v:/s/LMS/EWD68MK7MH1Om2LHpxn1rmMBPvjHCQx3bs1IL7muCmXQIQ?e=YPw9Wa")}
-        controls>
+        src={videoUrl}
+        controls
+        >
       </video>
 
-      <button onClick={() => SetRememberedTime()}>Set Remembered Time</button>
-      <button onClick={() => videoRef && videoRef.current && videoRef.current.play()}>Play Video</button>
-      <button onClick={() => (playing ? PausePlayer() : ResumePlayer())}>{playing ? "Pause" : "Resume"}
-      </button>
+      {/* <button onClick={() => SetRememberedTime()}>Set Remembered Time</button>
+      <button onClick={() => videoRef && videoRef.current && videoRef.current.play()}>Play Video</button> */}
+      <button onClick={() => (playing ? PausePlayer() : ResumePlayer())}>{playing ? "Pause" : "Play"}</button>
 
       <div>
         {position.toFixed(2)}/{duration.toFixed(2)}
       </div>
 
-      <input
+      {/* <input
         type="range"
         min={0}
         max={duration}
         value={position}
         style={{ width: 300 }}
-      />
+      /> */}
     </div>
   );
 }
