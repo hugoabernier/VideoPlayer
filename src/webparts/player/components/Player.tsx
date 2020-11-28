@@ -115,9 +115,14 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
       </video>
 
       <Slider
+        styles={{titleLabel:{
+          fontWeight: 'bold',
+          paddingLeft: '8px'
+        }}}
         max={duration}
         value={+position}
         label={`${DisplayTime(+position)}/${DisplayTime(duration)}`}
+        valueFormat={(value:number)=>`${DisplayTime(value)}/${DisplayTime(duration)}`}
         onChange={(newTime: number)=>SetTime(newTime)}
         showValue={false}
       />
