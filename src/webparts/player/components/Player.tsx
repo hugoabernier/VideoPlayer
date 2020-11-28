@@ -106,7 +106,7 @@ function Login() {
       <video
         ref={videoRef}
         style={{ width: 400, height: 400 }}
-        src={require("https://mercuriusit.sharepoint.com/:v:/r/sites/365Maxlearning/Course%20Content/C2020AZUR11%20-%20Azure%20DevOps%20Concept/AzureDevOps.mp4")}
+        src={require("https://codrz.sharepoint.com/:v:/s/LMS/EWD68MK7MH1Om2LHpxn1rmMBPvjHCQx3bs1IL7muCmXQIQ?e=YPw9Wa")}
         controls>
       </video>
 
