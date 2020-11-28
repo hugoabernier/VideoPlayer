@@ -27,7 +27,8 @@
     "@pnp/sp": "^2.0.12",
     "office-ui-fabric-react": "6.214.0",
     "react": "16.8.5",
-    "react-dom": "16.8.5"
+    "react-dom": "16.8.5",
+    "react-resize-detector": "^5.2.0"
   },
   "devDependencies": {
     "@types/react": "16.8.8",

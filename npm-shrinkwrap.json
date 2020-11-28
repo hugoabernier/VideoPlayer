@@ -11581,8 +11581,7 @@
     "lodash": {
       "version": "4.17.20",
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.20.tgz",
-      "integrity": "sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==",
-      "dev": true
+      "integrity": "sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA=="
     },
     "lodash._basecopy": {
       "version": "3.0.1",
@@ -14295,6 +14294,11 @@
       "integrity": "sha1-nsYfeQSYdXB9aUFFlv2Qek1xHnM=",
       "dev": true
     },
+    "raf-schd": {
+      "version": "4.0.2",
+      "resolved": "https://registry.npmjs.org/raf-schd/-/raf-schd-4.0.2.tgz",
+      "integrity": "sha512-VhlMZmGy6A6hrkJWHLNTGl5gtgMUm+xfGza6wbwnE914yeQ5Ybm18vgM734RZhMgfw4tacUrWseGZlpUrrakEQ=="
+    },
     "ramda": {
       "version": "0.25.0",
       "resolved": "https://registry.npmjs.org/ramda/-/ramda-0.25.0.tgz",
@@ -14399,6 +14403,17 @@
       "version": "16.13.1",
       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
+    },
+    "react-resize-detector": {
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/react-resize-detector/-/react-resize-detector-5.2.0.tgz",
+      "integrity": "sha512-PQAc03J2eyhvaiWgEdQ8+bKbbyGJzLEr70KuivBd1IEmP/iewNakLUMkxm6MWnDqsRPty85pioyg8MvGb0qC8A==",
+      "requires": {
+        "lodash": "^4.17.20",
+        "prop-types": "^15.7.2",
+        "raf-schd": "^4.0.2",
+        "resize-observer-polyfill": "^1.5.1"
+      }
     },
     "read": {
       "version": "1.0.7",
@@ -14712,6 +14727,11 @@
       "version": "2.1.20",
       "resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.1.20.tgz",
       "integrity": "sha1-EUgiyRfsh5NFCy2qoeubvxEB6TE="
+    },
+    "resize-observer-polyfill": {
+      "version": "1.5.1",
+      "resolved": "https://registry.npmjs.org/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz",
+      "integrity": "sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg=="
     },
     "resolve": {
       "version": "1.8.1",

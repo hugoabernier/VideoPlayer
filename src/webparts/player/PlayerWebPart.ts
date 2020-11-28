@@ -33,7 +33,8 @@ export default class PlayerWebPart extends BaseClientSideWebPart<IPlayerWebPartP
     const element: React.ReactElement<IPlayerProps> = React.createElement(
       Player,
       {
-        videoUrl: this.properties.videoUrl
+        videoUrl: this.properties.videoUrl,
+        domElement: this.domElement,
       }
     );
 

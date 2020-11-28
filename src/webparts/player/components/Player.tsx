@@ -4,6 +4,7 @@ import { IPlayerProps } from './IPlayerProps';
 import { useEffect, useRef, useState } from "react";
 import { Slider } from 'office-ui-fabric-react/lib/Slider';
 import { IconButton, IIconProps, initializeIcons } from 'office-ui-fabric-react';
+import ReactResizeDetector from 'react-resize-detector';
 
 import "@pnp/polyfill-ie11"; // IE browser Support
 
@@ -16,6 +17,7 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
   const [position, setPosition] = useState(localStorage.getItem('@Player'));
   const [videoUrl, setVideoUrl] = useState(localStorage.getItem('@Url'));
   const [duration, setDuration] = useState(0);
+  const [elementWidth, setElementWidth] = useState(props.domElement.getBoundingClientRect().width);
 
   useEffect(() => {
     console.log("Use Effect", videoRef);
@@ -44,7 +46,7 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
         if (event && event.target && event.target.duration && event.target.currentTime) {
           setDuration(() => event.target.duration);
           setPosition(() => event.target.currentTime);
-          setVideoUrl(()=> videoRef.current.src);
+          setVideoUrl(() => videoRef.current.src);
         }
 
       };
@@ -86,16 +88,20 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
   }
 
   function DisplayTime(timePosition: number): string {
-    const minutes: number = Math.floor(timePosition/60);
+    const minutes: number = Math.floor(timePosition / 60);
     const seconds: number = timePosition % 60;
 
-    return pad(minutes.toFixed(0),2) + ":" + pad(seconds.toFixed(0),2);
+    return pad(minutes.toFixed(0), 2) + ":" + pad(seconds.toFixed(0), 2);
   }
 
   function pad(num: string, size: number): string {
     var s = "000000000" + num;
-    return s.substr(s.length-size);
-}
+    return s.substr(s.length - size);
+  }
+
+  const onResize = () => {
+    setElementWidth(props.domElement.getBoundingClientRect().width);
+  };
 
   //const url: string = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
   //const url: string = "https://codrz.sharepoint.com/sites/LMS/_layouts/15/download.aspx?SourceUrl=%2Fsites%2FLMS%2FShared%20Documents%2FAzureDevOps%2Emp4";
@@ -108,26 +114,28 @@ export const Player: React.FunctionComponent<IPlayerProps> = (props) => {
     <div>
       <video
         ref={videoRef}
-        style={{ width: 400, height: 400 }}
+        style={{ width: props.domElement.getBoundingClientRect().width }}
         src={props.videoUrl}
-        //controls
-        >
+      //controls
+      >
       </video>
 
       <Slider
-        styles={{titleLabel:{
-          fontWeight: 'bold',
-          paddingLeft: '8px'
-        }}}
+        styles={{
+          titleLabel: {
+            fontWeight: 'bold',
+            paddingLeft: '8px'
+          }
+        }}
         max={duration}
         value={+position}
         label={`${DisplayTime(+position)}/${DisplayTime(duration)}`}
-        valueFormat={(value:number)=>`${DisplayTime(value)}/${DisplayTime(duration)}`}
-        onChange={(newTime: number)=>SetTime(newTime)}
+        valueFormat={(value: number) => `${DisplayTime(value)}/${DisplayTime(duration)}`}
+        onChange={(newTime: number) => SetTime(newTime)}
         showValue={false}
       />
-      <IconButton iconProps={playing ? pauseIcon : playIcon} title={playing ? "Pause": "Play"} ariaLabel={playing ? "Pause": "Play"} onClick={() =>(playing ? PausePlayer() : ResumePlayer()) }  />
-
+      <IconButton iconProps={playing ? pauseIcon : playIcon} title={playing ? "Pause" : "Play"} ariaLabel={playing ? "Pause" : "Play"} onClick={() => (playing ? PausePlayer() : ResumePlayer())} />
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
     </div>
   );
 };
