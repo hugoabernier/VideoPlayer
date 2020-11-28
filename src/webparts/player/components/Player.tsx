@@ -55,7 +55,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 function Login() {
   const videoRef = useRef<HTMLVideoElement>(undefined);
   const [playing, setPlaying] = useState(false);
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(localStorage.getItem('@Player'));
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
@@ -85,7 +85,6 @@ function Login() {
         if (event && event.target && event.target.duration && event.target.currentTime) {
           setDuration(() => event.target.duration);
           setPosition(() => event.target.currentTime);
-          //SetRememberedTime();
         }
 
       };
@@ -93,6 +92,12 @@ function Login() {
       SetRememberedTime();
     }
   }, [videoRef]);
+
+  React.useEffect(() => {
+    console.log("Setting the position", position);
+    localStorage.setItem('@Player', position);
+  }, [position]);
+
 
   function PausePlayer() {
     console.log("Pause", videoRef);
@@ -104,18 +109,18 @@ function Login() {
     videoRef.current.play();
   }
 
-  async function SetRememberedTime() {
+  function SetRememberedTime() {
     console.log("Set Remembered Time", videoRef);
-    let item = await localStorage.getItem("@Player");
-    if (item) {
-      let itemJson = JSON.parse(item);
+    // let item = await localStorage.getItem("@Player");
+    // if (item) {
+    //   let itemJson = JSON.parse(item);
 
-      if (itemJson.duration && itemJson.position) {
-        setDuration(() => itemJson.duration);
-        setPosition(() => itemJson.position);
-        videoRef.current.currentTime = itemJson.position;
-      }
-    }
+    //   if (itemJson.duration && itemJson.position) {
+    //     setDuration(() => itemJson.duration);
+    //     setPosition(() => itemJson.position);
+        videoRef.current.currentTime = +position;
+    //   }
+    // }
   }
 
   const videoUrl: string = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
@@ -136,7 +141,7 @@ function Login() {
       <button onClick={() => (playing ? PausePlayer() : ResumePlayer())}>{playing ? "Pause" : "Play"}</button>
 
       <div>
-        {position.toFixed(2)}/{duration.toFixed(2)}
+        {(+position).toFixed(2)}/{duration.toFixed(2)}
       </div>
 
       {/* <input
